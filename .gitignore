@@ -1,0 +1,9 @@
+#################
+## gitignore
+#################
+*.opensdf
+*.sdf
+*.sln
+*.v11.suo
+*.vcxproj
+*.vcxproj.filters
