@@ -1,5 +1,30 @@
 #include "functions.h"
 
+TYPE square_norma(TYPE *v, TYPE *m , int size){
+	TYPE summ = 0;
+	for(int i = 0; i < size ; i++ ) summ += v[i]*m[i];
+	return summ;
+};
+
+TYPE norma(TYPE *v, TYPE *m , int size){
+	TYPE summ = 0;
+	for(int i = 0; i < size ; i++ ) summ += v[i]*m[i];
+	summ = sqrt(summ);
+	return summ;
+};
+
+TYPE summ_vector(TYPE *v, TYPE *m , TYPE *res, int size){
+	TYPE summ = 0;
+	for(int i = 0; i < size ; i++ ) res[i] = v[i]+m[i];
+	return *res;
+};
+
+TYPE mul_scalar_vector(TYPE scalar, TYPE *v , int size){
+	TYPE summ = 0;
+	for(int i = 0; i < size ; i++ ) v[i] = scalar * v[i];
+	return *v;
+};
+
 void matrix::read_kuslau(){
 	 ifstream input("kuslau.txt");
 	 input >> N;
