@@ -25,10 +25,11 @@ class matrix{
 		TYPE *r;
 		TYPE *z;
 		TYPE *p;
+		TYPE *temp;
 	public:
 		void read_kuslau();
 		void read_matrix_data();
-		TYPE mul_matrix_vector(TYPE *v);
+		void mul_matrix_vector(TYPE *v);
 		void dec_LU_sq();
 		void allocation_memory();
 		void clear_memory();

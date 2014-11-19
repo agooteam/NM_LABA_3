@@ -47,6 +47,7 @@ void matrix::allocation_memory(){
 	r = new TYPE[N];
 	z = new TYPE[N];
 	p = new TYPE[N];
+	temp = new TYPE[N]();
 };
 
 void matrix::clear_memory(){
@@ -60,6 +61,7 @@ void matrix::clear_memory(){
 	delete [] r;
 	delete [] z;
 	delete [] p;
+	delete [] temp;
 };
 
 void matrix::read_matrix_data(){
@@ -81,3 +83,17 @@ void matrix::read_matrix_data(){
 	for(int i = 0; i < count_elem; i++) input >> ggu[i];
 	input.close();
 };
+
+void matrix::mul_matrix_vector(TYPE *v){
+	for(int i = 0 ; i < N ; i++){
+		temp[i] += di[i]*v[i];
+		int count_elem = ig[i+1] - ig[i];
+		for(int p = 0 ; p < count_elem; p++){
+			int m = ig[i]+p;
+			int column = jg[m];
+			temp[i] += ggl[m]*v[column];
+			temp[column] += ggu[m] * v[i];
+		}
+	}
+};
+		
