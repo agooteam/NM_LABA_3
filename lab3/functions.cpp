@@ -19,11 +19,7 @@ TYPE summ_vector(TYPE *v, TYPE *m , TYPE *res, int size){
 	return *res;
 };
 
-TYPE mul_scalar_vector(TYPE scalar, TYPE *v , int size){
-	TYPE summ = 0;
-	for(int i = 0; i < size ; i++ ) v[i] = scalar * v[i];
-	return *v;
-};
+
 
 void matrix::read_kuslau(){
 	 ifstream input("kuslau.txt");
@@ -85,6 +81,7 @@ void matrix::read_matrix_data(){
 };
 
 void matrix::mul_matrix_vector(TYPE *v){
+	for(int i = 0 ; i < N ;i++) temp[i] = 0;
 	for(int i = 0 ; i < N ; i++){
 		temp[i] += di[i]*v[i];
 		int count_elem = ig[i+1] - ig[i];
@@ -113,4 +110,33 @@ TYPE matrix::calc_otn_nevazka(){
 	q2 = norma(pr,pr,N);
 	q1 /= q2; 
 	return q1;
-};		
+};
+
+void matrix::LOS(){
+	alfa = square_norma(p,r,N)/square_norma(p,p,N);
+	for(int i = 0; i < N ; i++){
+		x[i] += alfa*z[i];
+		r[i] -= alfa*p[i];
+	}
+	mul_matrix_vector(r);
+	betta = -square_norma(p,temp,N)/square_norma(p,p,N);
+	for(int i = 0; i < N ; i++){
+		z[i] = r[i] + betta*z[i];
+		p[i] = temp[i] + betta*p[i];
+	}
+};
+int matrix::get_maxiter(){
+	return maxiter;
+};
+TYPE matrix::get_eps(){
+	return eps;
+};
+
+void matrix::write_result(int total,TYPE nevyazka){
+	FILE * fp = fopen("result.txt","w");
+	fprintf(fp,"%d\n",total);
+	for(int i = 0; i < N ; i++) fprintf(fp,FRM_STR_OUT,x[i]);
+	for(int i = 1; i <= N ; i++) fprintf(fp,FRM_STR_EPS,x[i-1] - i);
+	fprintf(fp,FRM_STR_EPS,nevyazka);
+	fclose(fp);
+};

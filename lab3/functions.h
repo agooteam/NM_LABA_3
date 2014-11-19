@@ -3,10 +3,13 @@
 #include <math.h>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 typedef double TYPE;
 
+#define FRM_STR_OUT "%.15lf\n"
+#define FRM_STR_EPS "%e\n"
 
 class matrix{
 	protected:
@@ -35,4 +38,8 @@ class matrix{
 		void clear_memory();
 		void calc_start_values();
 		TYPE calc_otn_nevazka();
+		void LOS();
+		int get_maxiter();
+		TYPE get_eps();
+		void write_result(int total,TYPE nevyazka);
 };
