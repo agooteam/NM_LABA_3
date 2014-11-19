@@ -7,3 +7,12 @@
 *.v11.suo
 *.vcxproj
 *.vcxproj.filters
+*txt
+*exe
+*tlog
+*lastbuildstate
+*log
+*pdb
+*ilk
+*obj
+*idb
