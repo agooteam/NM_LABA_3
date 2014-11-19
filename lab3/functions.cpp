@@ -96,4 +96,21 @@ void matrix::mul_matrix_vector(TYPE *v){
 		}
 	}
 };
-		
+
+void matrix::calc_start_values(){
+	for(int i = 0; i < N ;i++){
+		x[i] = 0;
+		r[i] = pr[i];
+		z[i] = r[i];
+	}
+	mul_matrix_vector(r);
+	for(int i = 0; i < N ;i++) p[i] = temp[i];
+};
+
+TYPE matrix::calc_otn_nevazka(){
+	TYPE q1,q2;
+	q1 = norma(r,r,N);
+	q2 = norma(pr,pr,N);
+	q1 /= q2; 
+	return q1;
+};		

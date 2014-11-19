@@ -33,4 +33,6 @@ class matrix{
 		void dec_LU_sq();
 		void allocation_memory();
 		void clear_memory();
+		void calc_start_values();
+		TYPE calc_otn_nevazka();
 };
