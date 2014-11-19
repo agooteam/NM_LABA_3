@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 typedef double TYPE;
@@ -22,8 +23,8 @@ class matrix{
 		int N;
 		int maxiter;
 		TYPE eps;
-		TYPE *ig;
-		TYPE *jg;
+		int *ig;
+		int *jg;
 		TYPE *ggl;
 		TYPE *ggu;
 		TYPE *di;
