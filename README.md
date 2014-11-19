@@ -27,9 +27,13 @@ NM_LABA_3
   * TYPE *r ; - вектор неязки
   * TYPE *z ; - вектор спуска
   * TYPE *p ; - вектор p
+  * TYPE *temp; - вспомогательный массив
   * void read_kuslau(); - чтение N,maxiter,eps
   * void read_matrix_data(); - чтение векторов матрицы ig - pr;
   * TYPE mul_matrix_vector(TYPE *v); - умножение матрицы на вектор
   * void dec_LU_sq(); - LU(SQ) неполная факторизация(разложение) 
   * void allocation_memory(); - функция выделения памяти
   * void clear_memory(); - функция очистки памяти
+  * int get_maxiter(); - получение максимального числа итераций
+  * TYPE get_eps(); - получение допустимого значения невязки
+  * void write_result(int total,TYPE nevyazka); - вывод результатов в файл
