@@ -43,7 +43,11 @@ void matrix::allocation_memory(){
 	r = new TYPE[N];
 	z = new TYPE[N];
 	p = new TYPE[N];
-	temp = new TYPE[N]();
+	temp = new TYPE[N];
+	temp2 = new TYPE[N];
+	cggl = new TYPE[count_elem];
+	cggu = new TYPE[count_elem];
+	cdi = new TYPE[N];
 };
 
 void matrix::clear_memory(){
@@ -58,6 +62,10 @@ void matrix::clear_memory(){
 	delete [] z;
 	delete [] p;
 	delete [] temp;
+	delete [] temp2;
+	delete [] cggu;
+	delete [] cggl;
+	delete [] cdi;
 };
 
 void matrix::read_matrix_data(){
@@ -94,15 +102,6 @@ void matrix::mul_matrix_vector(TYPE *v){
 	}
 };
 
-void matrix::calc_start_values(){
-	for(int i = 0; i < N ;i++){
-		x[i] = 0;
-		r[i] = pr[i];
-		z[i] = r[i];
-	}
-	mul_matrix_vector(r);
-	for(int i = 0; i < N ;i++) p[i] = temp[i];
-};
 
 TYPE matrix::calc_otn_nevazka(){
 	TYPE q1,q2;
@@ -112,7 +111,7 @@ TYPE matrix::calc_otn_nevazka(){
 	return q1;
 };
 
-void matrix::LOS(){
+void matrix::LOS_clean(){
 	alfa = square_norma(p,r,N)/square_norma(p,p,N);
 	for(int i = 0; i < N ; i++){
 		x[i] += alfa*z[i];
@@ -125,6 +124,23 @@ void matrix::LOS(){
 		p[i] = temp[i] + betta*p[i];
 	}
 };
+
+void matrix::LOS_diag(){
+	alfa = square_norma(p,r,N)/square_norma(p,p,N);
+	for(int i = 0; i < N ; i++){
+		x[i] += alfa*z[i];
+		r[i] -= alfa*p[i];
+	}
+	for(int i = 0; i < N;i++) temp2[i] = r[i]/sqrt(di[i]);
+	mul_matrix_vector(temp2);
+	for(int i = 0; i < N;i++) temp[i] = temp[i]/sqrt(di[i]);
+	betta = -square_norma(p,temp,N)/square_norma(p,p,N);
+	for(int i = 0; i < N ; i++){
+		z[i] = r[i]/sqrt(di[i]) + betta*z[i];
+		p[i] = temp[i] + betta*p[i];
+	}
+};
+
 int matrix::get_maxiter(){
 	return maxiter;
 };
@@ -139,4 +155,25 @@ void matrix::write_result(int total,TYPE nevyazka){
 	for(int i = 1; i <= N ; i++) fprintf(fp,FRM_STR_EPS,x[i-1] - i);
 	fprintf(fp,FRM_STR_EPS,nevyazka);
 	fclose(fp);
+};
+
+void matrix::calc_start_values(int solve){
+	if(solve == 1){
+		for(int i = 0; i < N ;i++){
+			x[i] = 0;
+			r[i] = pr[i];
+			z[i] = r[i];
+		}
+		mul_matrix_vector(r);
+		for(int i = 0; i < N ;i++) p[i] = temp[i];
+	}
+	else if(solve == 2){
+		for(int i = 0; i < N ;i++){
+			x[i] = 0;
+			r[i] = pr[i]/sqrt(di[i]);
+			z[i] = r[i]/sqrt(di[i]);
+		}
+		mul_matrix_vector(z);
+		for(int i = 0; i < N ;i++) p[i] = temp[i]/sqrt(di[i]);
+	}
 };
