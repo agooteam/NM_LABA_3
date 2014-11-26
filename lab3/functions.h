@@ -38,13 +38,18 @@ class matrix{
 		void read_matrix_data();
 		void mul_matrix_vector(TYPE *v);
 		void dec_LU_sq();
+		TYPE dec_calc_elem(int i, int j, int current_elem);
+		TYPE dec_calc_diag(int j, int current_elem);
 		void allocation_memory();
 		void clear_memory();
 		void calc_start_values(int solve);
 		TYPE calc_otn_nevazka();
 		void LOS_clean();
 		void LOS_diag();
+		void LOS_LU_sq();
 		int get_maxiter();
 		TYPE get_eps();
 		void write_result(int total,TYPE nevyazka);
+		void direct(TYPE *in,TYPE *out);
+		void reverse(TYPE *in,TYPE *out);
 };

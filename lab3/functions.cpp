@@ -141,6 +141,23 @@ void matrix::LOS_diag(){
 	}
 };
 
+void matrix::LOS_LU_sq(){
+	alfa = square_norma(p,r,N)/square_norma(p,p,N);
+	for(int i = 0; i < N ; i++){
+		x[i] += alfa*z[i];
+		r[i] -= alfa*p[i];
+	}
+	reverse(r,temp2);
+	mul_matrix_vector(temp2);
+	direct(temp,temp2);
+	betta = -square_norma(p,temp2,N)/square_norma(p,p,N);
+	reverse(r,temp);
+	for(int i = 0; i < N ; i++){
+		z[i] = temp[i] + betta*z[i];//
+		p[i] = temp2[i] + betta*p[i];
+	}
+};
+
 int matrix::get_maxiter(){
 	return maxiter;
 };
@@ -176,4 +193,72 @@ void matrix::calc_start_values(int solve){
 		mul_matrix_vector(z);
 		for(int i = 0; i < N ;i++) p[i] = temp[i]/sqrt(di[i]);
 	}
+	else if(solve == 3){
+		for(int i = 0; i < N ;i++) x[i] = 0;
+		direct(pr,r);
+		reverse(r,z);
+		mul_matrix_vector(z);
+		direct(temp,p);
+	}
+};
+
+void matrix::dec_LU_sq(){
+	int i,j,kol,kl=0,ku=0;
+	for(i = 0 ; i < N; i++){
+		kol = ig[i+1] - ig[i];
+		for(j = 0; j < kol; j++){
+			cggl[kl] = (ggl[kl] - dec_calc_elem(i,j,kl)) / cdi[jg[kl]];
+			kl++;
+		}
+		for(j = 0;j < kol; j++){
+			cggu[ku] = (ggu[ku] - dec_calc_elem(i,j,ku)) / cdi[jg[ku]];
+			ku++;
+		}
+		cdi[i] = sqrt(di[i] - dec_calc_diag(j,kl));
+	}
+
+};
+
+TYPE matrix::dec_calc_elem(int i, int j, int current_elem){
+	TYPE s = 0;
+	int k,J=jg[current_elem],p;
+	for( k = j ; k > 0; k--){
+		for(p = ig[J];p < ig[J+1]; p++) if(jg[p] == jg[current_elem - k]) s+= cggl[current_elem - k]*cggu[p];
+	}
+	return s;
+};
+
+TYPE matrix::dec_calc_diag(int j, int current_elem){
+	TYPE s=0;
+	int k;
+	for( k = current_elem-j; k < current_elem; k++) s += cggl[k]*cggu[k];
+	return s;
+};
+
+void matrix::direct(TYPE *in,TYPE *out){
+	int k = 0,column,count;
+	for(int i = 0; i < N; i++) out[i] = in[i];
+	for(int i = 0 ; i < N; i++){	
+		TYPE s=0;
+		count = ig[i+1] - ig[i];
+		for(int j = 0; j < count; j++, k++){ 	
+			column = jg[k];
+			s+= cggl[k]*out[column];
+		}
+		out[i] = (out[i]-s) / cdi[i];
+	}
+};
+
+void matrix::reverse(TYPE *in,TYPE *out){
+	int k = ig[N] - ig[0]-1,count,column;
+	for(int i = 0; i < N; i++) out[i] = in[i];
+	for(int i = N-1; i>=0; i--){	
+		out[i] = out[i]/cdi[i];
+		count = ig[i+1] - ig[i];
+		for(int j = 0; j < count; j++, k--){	
+			column = jg[k];
+			out[column] -= cggu[k]*out[i];
+		}	
+	}
+
 };
