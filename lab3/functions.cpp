@@ -29,10 +29,15 @@ void matrix::read_kuslau(){
 	 input.close();
 };
 
-void matrix::allocation_memory(){
+void matrix::allocation_memory(int type){
 	ifstream input("ig.txt");
 	ig = new int[N+1];
-	for(int i = 0; i <= N; i++){ input >> ig[i] ; ig[i]--;}
+	if(type == 1) for(int i = 0; i <= N; i++){ input >> ig[i] ; ig[i]--;}
+	if(type == 2) {
+		ig[0] = 0;
+		ig[1] = 0;
+		for(int i = 1; i < N; i++) ig[i+1] = ig[i] + i; 
+	}
 	int count_elem = ig[N] - ig[0];
 	jg = new int[count_elem];
 	ggl = new TYPE[count_elem];
@@ -48,6 +53,7 @@ void matrix::allocation_memory(){
 	cggl = new TYPE[count_elem];
 	cggu = new TYPE[count_elem];
 	cdi = new TYPE[N];
+	input.close();
 };
 
 void matrix::clear_memory(){
@@ -261,4 +267,26 @@ void matrix::reverse(TYPE *in,TYPE *out){
 		}	
 	}
 
+};
+
+void matrix::generate(){
+	int i, j, N1, ch;
+
+	for(int i = 0; i < N; i++) { di[i] = 1.0/(2*i+1); }
+	ch = 0; int k = 0;
+	for(int i = 0; i < N-1;i++) {
+		for(int j = 0; j <= i; j++,k++) jg[k] = j;
+	}
+	ch = 0;
+	for(int i = 0; i < N; i++) {
+		N1 = ig[i+1]- ig[i];
+		for(int j = 0; j < N1; j++, ch++){
+			ggu[ch] = 1.0/(i+j+1);
+		}
+	}
+	ggl = ggu;
+	TYPE *vector = new TYPE[N];
+	for(int i = 0; i < N ;i++) vector[i] = i + 1;
+	mul_matrix_vector(vector);
+	for(int i = 0; i < N ; i++) pr[i] = temp[i];
 };

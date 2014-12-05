@@ -40,7 +40,7 @@ class matrix{
 		void dec_LU_sq();
 		TYPE dec_calc_elem(int i, int j, int current_elem);
 		TYPE dec_calc_diag(int j, int current_elem);
-		void allocation_memory();
+		void allocation_memory(int type);
 		void clear_memory();
 		void calc_start_values(int solve);
 		TYPE calc_otn_nevazka();
@@ -52,4 +52,5 @@ class matrix{
 		void write_result(int total,TYPE nevyazka);
 		void direct(TYPE *in,TYPE *out);
 		void reverse(TYPE *in,TYPE *out);
+		void generate();
 };

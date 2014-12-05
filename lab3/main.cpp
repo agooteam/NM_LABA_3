@@ -12,14 +12,15 @@ void solve(int solve_type){
 	if(solve_type == 2) for(; k < maxiter && A.calc_otn_nevazka() > eps; k++)A.LOS_diag();//2 - diag
 	if(solve_type == 3) for(; k < maxiter && A.calc_otn_nevazka() > eps; k++)A.LOS_LU_sq();//3- lu(sq)
 	TYPE mm =  A.calc_otn_nevazka();
-	A.write_result(k-1,mm);
+	A.write_result(k,mm);
 };
 
 void main(){
 	setlocale(LC_CTYPE,"rus");
 	A.read_kuslau();
-	A.allocation_memory();
-	A.read_matrix_data();
+	A.allocation_memory(2);
+	//A.read_matrix_data();
+	A.generate();
 	solve(3);
 	system("pause");
 };
